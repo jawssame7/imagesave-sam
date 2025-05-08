@@ -1,0 +1,57 @@
+version = 0.1
+
+# デフォルト設定（共通設定）
+[default]
+[default.global.parameters]
+stack_name = "imagesave-sam"
+
+[default.build.parameters]
+cached = true
+parallel = true
+
+[default.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+resolve_s3 = true
+s3_prefix = "imagesave-sam"
+region = "ap-northeast-1"
+parameter_overrides = [
+  "BucketName=testbucket-devsame73",
+  "Env=dev",
+  "MemorySize=512",
+  "EnableDetailedMonitoring=false",
+  "ApiStageName=Prod"
+]
+
+[default.sync.parameters]
+watch = true
+
+[default.local_start_api.parameters]
+warm_containers = "EAGER"
+
+# 開発環境の設定
+[dev.deploy.parameters]
+stack_name = "image-save-dev"
+s3_prefix = "image-save-dev"
+resolve_s3 = true
+disable_rollback = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "BucketName=\"testbucket-devsame73-dev\" Env=\"dev\" MemorySize=\"256\" ApiStageName=\"dev\" EnableDetailedMonitoring=\"false\""
+
+# テスト環境の設定
+[test.deploy.parameters]
+stack_name = "image-save-test"
+s3_prefix = "image-save-test"
+resolve_s3 = true
+disable_rollback = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "BucketName=\"testbucket-devsame73-test\" Env=\"test\" MemorySize=\"512\" ApiStageName=\"test\" EnableDetailedMonitoring=\"true\""
+
+# 本番環境の設定
+[prod.deploy.parameters]
+stack_name = "image-save-prod"
+s3_prefix = "image-save-prod"
+resolve_s3 = true
+disable_rollback = false  # 本番ではロールバックを有効化
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "BucketName=\"testbucket-devsame73-prod\" Env=\"prod\" MemorySize=\"1024\" ApiStageName=\"prod\" EnableDetailedMonitoring=\"true\""
